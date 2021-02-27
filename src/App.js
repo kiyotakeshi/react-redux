@@ -41,17 +41,42 @@ import React from 'react';
 
 // functional component
 const App = () => {
+  const profiles = [
+    { name: "Taro" , age: 10 },
+    { name: "Hanako" , age: 15 },
+    { name: "Kendrick" },
+  ]
+
   return(
     <div>
-      <Cat />
-      <Cat />
-      <Cat />
+      {/* <Cat /> */}
+      {/* 親のコンポーネントから子のコンポーネントにデータを渡したいときに props を使う　 */}
+      {/* user component に対して name という props(属性) を与えられる */}
+      {/* <User name={"Taro"} age={10}/> */}
+      {/* <User name={"Hanako"} age={15}/> */}
+      {
+        // どの virtual dom が変更になったかを判別するために、 key を与える必要がある　
+        // index.js:1 Warning: Each child in a list should have a unique "key" prop.
+        profiles.map((profile, index) => {
+          return <User name={profile.name} age={profile.age} key={index}/>
+        })
+      }
     </div>
   ) 
 }
 
-const Cat = () => {
-  return <div>Meow!</div>
+const User = (props) => {
+  return <div>Hi, I am {props.name}, and {props.age} years old!</div>
 }
+
+User.defaultProps = {
+  age: 1
+}
+
+
+
+// const Cat = () => {
+//   return <div>Meow!</div>
+// }
 
 export default App;

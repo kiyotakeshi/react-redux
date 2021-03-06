@@ -1,4 +1,8 @@
 import React, {Component} from 'react';
+import { connect } from 'react-redux';
+
+import { increment, decrement } from '../actions';
+
 // import PropTypes from 'prop-types';
 
 // class App extends Component {
@@ -40,38 +44,44 @@ import React, {Component} from 'react';
 //     }
 // }
 
-// functional component
-const App = () => (<Counter/>)
+class App extends Component {
 
-class Counter extends Component {
+  // カウンターの値を 0 にする初期化処理は、
+  // Redux では reducer によって行うため不要
+  // constructor(props){
+  //   super(props)
+  //   console.log(this.state)
+  //   this.state = { count: 0 }
+  // }
 
-  constructor(props){
-    super(props)
-    console.log(this.state)
-    this.state = { count: 0 }
-  }
+  // action creator から reducer 内の状態変化を呼ぶことで実現しているため不要
+  // handlePlusButton = () => {
+  //   // console.log("handlePlusButton")
+  //   // console.log(this.state.count)
+  //   // 状態を変えるときは、 setState を使う
+  //   // setState が実行されると render() が実行される
+  //   // そのため、プログラマーは描画の変更を意識しなくていい
+  //   this.setState({count: this.state.count + 1})
+  // }
 
-  handlePlusButton = () => {
-    // console.log("handlePlusButton")
-    // console.log(this.state.count)
-    // 状態を変えるときは、 setState を使う
-    // setState が実行されると render() が実行される
-    // そのため、プログラマーは描画の変更を意識しなくていい
-    this.setState({count: this.state.count + 1})
-  }
-
-  handleMinusButton = () => {
-    this.setState({count: this.state.count - 1})
-  }
-
+  // handleMinusButton = () => {
+  //   this.setState({count: this.state.count - 1})
+  // }
 
   render() {
-    console.log("render")
+    // console.log("render")
+
+    const props = this.props
+
     return (
       <React.Fragment>
+        {/* <div>count: { this.state.count}</div>
         <div>count: { this.state.count}</div>
         <button onClick={this.handlePlusButton}>+1</button>
-        <button onClick={this.handleMinusButton}>-1</button>
+        <button onClick={this.handleMinusButton}>-1</button> */}
+        <div>value: { props.value }</div>
+        <button onClick={props.increment}>+1</button>
+        <button onClick={props.decrement}>-1</button>
       </React.Fragment>
     )
   }
@@ -130,4 +140,19 @@ class Counter extends Component {
 //   return <div>Meow!</div>
 // }
 
-export default App;
+// state と action を component に関連づける
+
+// state の情報から component に必要なものを取り出して、
+// component 内の props として mapping する
+const mapStateToProps = state => ({value: state.count.value })
+
+// ある action が発生した時に、reducer に type に応じた状態遷移を実行させるための関数
+const mapDispatchToProps = dispatch => ({
+  increment: () => dispatch(increment()),
+  decrement: () => dispatch(decrement())
+})
+
+// 短く書くパターン
+// const mapDispatchToProps = ({ increment, decrement })
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)

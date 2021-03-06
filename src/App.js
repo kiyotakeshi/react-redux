@@ -1,5 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, {Component} from 'react';
+// import PropTypes from 'prop-types';
 
 // class App extends Component {
 //   render() {
@@ -41,49 +41,86 @@ import PropTypes from 'prop-types';
 // }
 
 // functional component
-const App = () => {
-  const profiles = [
-    { name: "Taro" , age: 10 },
-    { name: "Hanako" , age: 15 },
+const App = () => (<Counter/>)
 
-    // defaultProps を使用
-    // { name: "Kendrick" },
+class Counter extends Component {
 
-    // prop-types による型チェックに違反した場合
-    // index.js:1 Warning: Failed prop type: Invalid prop `name` of type `number` supplied to `User`, expected `string`.
-    // { name: 10 , age: "20"},
+  constructor(props){
+    super(props)
+    console.log(this.state)
+    this.state = { count: 0 }
+  }
 
-    // Warning: Failed prop type: The prop `age` is marked as required in `User`, but its value is `undefined`.
-    { name: "NoName"}
-  ]
+  handlePlusButton = () => {
+    // console.log("handlePlusButton")
+    // console.log(this.state.count)
+    // 状態を変えるときは、 setState を使う
+    // setState が実行されると render() が実行される
+    // そのため、プログラマーは描画の変更を意識しなくていい
+    this.setState({count: this.state.count + 1})
+  }
 
-  return(
-    <div>
-      {/* <Cat /> */}
-      {/* 親のコンポーネントから子のコンポーネントにデータを渡したいときに props を使う　 */}
-      {/* user component に対して name という props(属性) を与えられる */}
-      {/* <User name={"Taro"} age={10}/> */}
-      {/* <User name={"Hanako"} age={15}/> */}
-      {
-        // どの virtual dom が変更になったかを判別するために、 key を与える必要がある　
-        // index.js:1 Warning: Each child in a list should have a unique "key" prop.
-        profiles.map((profile, index) => {
-          return <User name={profile.name} age={profile.age} key={index}/>
-        })
-      }
-    </div>
-  ) 
+  handleMinusButton = () => {
+    this.setState({count: this.state.count - 1})
+  }
+
+
+  render() {
+    console.log("render")
+    return (
+      <React.Fragment>
+        <div>count: { this.state.count}</div>
+        <button onClick={this.handlePlusButton}>+1</button>
+        <button onClick={this.handleMinusButton}>-1</button>
+      </React.Fragment>
+    )
+  }
 }
 
-const User = (props) => {
-  return <div>Hi, I am {props.name}, and {props.age} years old!</div>
-}
+// const App = () => {
+
+  // const profiles = [
+  //   { name: "Taro" , age: 10 },
+  //   { name: "Hanako" , age: 15 },
+
+  //   // defaultProps を使用
+  //   // { name: "Kendrick" },
+
+  //   // prop-types による型チェックに違反した場合
+  //   // index.js:1 Warning: Failed prop type: Invalid prop `name` of type `number` supplied to `User`, expected `string`.
+  //   // { name: 10 , age: "20"},
+
+  //   // Warning: Failed prop type: The prop `age` is marked as required in `User`, but its value is `undefined`.
+  //   { name: "NoName"}
+  // ]
+
+//   return(
+//     <div>
+//       {/* <Cat /> */}
+//       {/* 親のコンポーネントから子のコンポーネントにデータを渡したいときに props を使う　 */}
+//       {/* user component に対して name という props(属性) を与えられる */}
+//       {/* <User name={"Taro"} age={10}/> */}
+//       {/* <User name={"Hanako"} age={15}/> */}
+//       {
+//         // どの virtual dom が変更になったかを判別するために、 key を与える必要がある　
+//         // index.js:1 Warning: Each child in a list should have a unique "key" prop.
+//         profiles.map((profile, index) => {
+//           return <User name={profile.name} age={profile.age} key={index}/>
+//         })
+//       }
+//     </div>
+//   ) 
+// }
+
+// const User = (props) => {
+//   return <div>Hi, I am {props.name}, and {props.age} years old!</div>
+// }
 
 // prop-types を用いて、型チェックを行う
-User.propTypes = {
-  name: PropTypes.string,
-  age: PropTypes.number.isRequired
-}
+// User.propTypes = {
+//   name: PropTypes.string,
+//   age: PropTypes.number.isRequired
+// }
 
 // User.defaultProps = {
 //   age: 1

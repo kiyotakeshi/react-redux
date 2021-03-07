@@ -1,5 +1,8 @@
 import _ from 'lodash';
-import { READ_EVENTS } from '../actions';
+import { 
+    READ_EVENTS,
+    DELETE_EVENT,
+} from '../actions';
 
 export default (events = {}, action) => {
     switch(action.type){
@@ -19,7 +22,12 @@ export default (events = {}, action) => {
             // id で抽出したものを key として再配置する
             // console.log(_.mapKeys(action.response.data, 'id'))
             return _.mapKeys(action.response.data, 'id');
-
+        case DELETE_EVENT:
+            // console.log(action.id)
+            // 削除した event はメモリ上から消去する
+            delete events[action.id];
+            // state 演算子を使うことで新しいメモリ空間上に、更新後の event の状態を reducer が返す
+            return { ...events };
         default:
             return events;
     }

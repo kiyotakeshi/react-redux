@@ -1,18 +1,15 @@
-// action を返す関数を action creater という
-// view を担当する compenent 側で利用するから export 
-// export const increment = () => {
-//     return {
-//         type: 'INCREMENT'
-//     }
-// }
-export const INCREMENT = 'INCREMENT'
-export const DECREMENT = 'DECREMENT'
+import axios from 'axios';
 
-export const increment = () => ({
-    type: INCREMENT
-})
+export const READ_EVENTS = 'READ_EVENTS'
 
+const ROOT_URL = 'https://udemy-utils.herokuapp.com/api/v1'
+const QUERYSTRING = '?token=token123'
 
-export const decrement = () => ({
-    type: DECREMENT
-})
+//  ピュアなオブジェクトではなく、非同期処理を返せるように redux-thunk を使う
+// action の代わりに、関数を返せるようにする
+export const readEvents = () => async dispath => {
+    // axios は非同期処理で戻り値が promise になる 
+    const response = await axios.get(`${ROOT_URL}/events${QUERYSTRING}`)
+    // console.log(response)
+    dispath({ type: READ_EVENTS, response })
+}

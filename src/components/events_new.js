@@ -31,7 +31,7 @@ class EventsNew extends Component {
 
     // 何も入力されていない状態 => pristine
     // 2度押されないようにする => submit ボタンが押されている状態かを判定する => submitting
-    const { handleSubmit, pristine, submitting } = this.props
+    const { handleSubmit, pristine, submitting, invalid } = this.props
 
     console.log(submitting)
 
@@ -43,7 +43,7 @@ class EventsNew extends Component {
         </div>
 
         <div>
-          <input type="submit" value="Submit" disabled={ pristine || submitting } />
+          <input type="submit" value="Submit" disabled={ pristine || submitting || invalid } />
           <Link to="/">Cancel</Link>
         </div>
       </form>

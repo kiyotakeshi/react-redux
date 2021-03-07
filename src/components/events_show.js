@@ -13,6 +13,11 @@ class EventsShow extends Component {
     this.onDeleteClick = this.onDeleteClick.bind(this)
   }
 
+  componentDidMount() {
+    const { id } = this.props.match.params;
+    if (id) this.props.getEvent(id);
+  }
+
   renderField(field) {
     const { input, label, type, meta: { touched, error } }  = field
     return(
@@ -32,7 +37,7 @@ class EventsShow extends Component {
   }
 
   async onSubmit(values){
-    // await this.props.postEvent(values)
+    await this.props.putEvent(values)
     this.props.history.push('/')
   }
 
@@ -40,7 +45,7 @@ class EventsShow extends Component {
 
     // 何も入力されていない状態 => pristine
     // 2度押されないようにする => submit ボタンが押されている状態かを判定する => submitting
-    const { handleSubmit, pristine, submitting } = this.props
+    const { handleSubmit, pristine, submitting, invalid } = this.props
 
     console.log(submitting)
 
@@ -52,7 +57,7 @@ class EventsShow extends Component {
         </div>
 
         <div>
-          <input type="submit" value="Submit" disabled={ pristine || submitting } />
+          <input type="submit" value="Submit" disabled={ pristine || submitting || invalid } />
           <Link to="/">Cancel</Link>
           <Link to="/" onClick={this.onDeleteClick}>Delete</Link>
         </div>
@@ -70,9 +75,14 @@ const validate = values => {
   return errors
 }
 
-const mapDispatchToProps = ({ deleteEvent })
+const mapStateToProps = (state, ownProps) => {
+  const event = state.events[ownProps.match.params.id];
+  return { initialValues: event, event };
+}
+
+const mapDispatchToProps = ({ deleteEvent, getEvent, putEvent })
 
 // event の状態に関して描画しないので mapStateToProps は null
-export default connect(null, mapDispatchToProps)(
-  reduxForm({ validate, form: 'eventShowForm'})(EventsShow)
+export default connect(mapStateToProps, mapDispatchToProps)(
+  reduxForm({ validate, form: 'eventShowForm', enableReinitialize: true })(EventsShow)
 )

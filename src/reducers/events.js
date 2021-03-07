@@ -1,11 +1,23 @@
 import _ from 'lodash';
 import { 
+    CREATE_EVENT,
     READ_EVENTS,
+    READ_EVENT,
+    UPDATE_EVENT,
     DELETE_EVENT,
 } from '../actions';
 
 export default (events = {}, action) => {
     switch(action.type){
+        case CREATE_EVENT:
+        case READ_EVENT:
+        case UPDATE_EVENT:
+            // console.log(action.response.data)
+            const data = action.response.data
+
+            // data の id を key にした情報で上書きしたものを渡す
+            return { ...events, [data.id]: data }
+
         case READ_EVENTS:
             // 全てを取り出して処理するのは効率が悪い
             // [
@@ -22,12 +34,14 @@ export default (events = {}, action) => {
             // id で抽出したものを key として再配置する
             // console.log(_.mapKeys(action.response.data, 'id'))
             return _.mapKeys(action.response.data, 'id');
+
         case DELETE_EVENT:
             // console.log(action.id)
             // 削除した event はメモリ上から消去する
             delete events[action.id];
             // state 演算子を使うことで新しいメモリ空間上に、更新後の event の状態を reducer が返す
             return { ...events };
+
         default:
             return events;
     }
